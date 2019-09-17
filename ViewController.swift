@@ -17,6 +17,7 @@ class ViewController: UIViewController {
   var count = 0//set count to 0
   var countD = 0//set count to 0
   var numofA = 0//set to 0
+  var numofAforD = 0
    var dealer1hand = 0//starting hand value set to 0
 var dleftnum = 0
   var startcount = 0//set to 0
@@ -148,6 +149,8 @@ var dleftnum = 0
   
   
   @IBAction func startbutton(_ sender: Any){
+     numofAforD =  0//reset
+    countD = 0//reset coutd to 0
     user1hand = 0//reset userhand
     amountbetput = 0//reset the amount bet put every time hit start
     numofA = 0
@@ -201,6 +204,7 @@ var dleftnum = 0
     }
     else if leftnum == 14{
       dealer1hand = 11//it has to be 11
+      numofAforD =  numofAforD + 1//increment one ace
     }
     else{
       dealer1hand = leftnum;
@@ -214,13 +218,9 @@ var dleftnum = 0
       dealer1hand = dealer1hand + 10
     }
     else if rightnum == 14{
-      if leftnum <= 10{
-        dealer1hand = dealer1hand + 11 //if user left card is slower or equal to 10, then treeat rightcard as 11
+        dealer1hand = dealer1hand + 11 //if get another A, then treeat it as 1
+         numofAforD =  numofAforD + 1//increment one ace
       }
-      else {
-        dealer1hand = dealer1hand + 1 //if get another A, then treeat it as 1
-      }
-    }
     else{
       dealer1hand = dealer1hand + rightnum
     }
@@ -281,12 +281,20 @@ var dleftnum = 0
     
     let rightnum = Int.random(in: 2...14)
     //   generate random num
-    
+  
     if rightnum == 11 || rightnum == 12 || rightnum == 13{//if cards r j,q,k assign them to 10
       dealer1hand = dealer1hand + 10
       if dealer1hand > 21{
+        if(numofAforD == 1){
+          dealer1hand = dealer1hand - 10 //treat one ace as one
+        }
+        else if(numofAforD == 2){
+          dealer1hand = dealer1hand - 20//treat ace as one
+        }
+        else{
         self.printwin.isHidden = false //print lose
         //sorry you are busted
+        }
       }
     }
     else if rightnum == 14{
@@ -294,36 +302,53 @@ var dleftnum = 0
       dealer1hand = dealer1hand + 1 //if get another A, then treeat it as 1
       if dealer1hand > 21{
         
-        self.printwin.isHidden = false //print lose
-        //you win, dealer busted
+        if(numofAforD == 1){
+          dealer1hand = dealer1hand - 10 //treat one ace as one
+        }
+        else if(numofAforD == 2){
+          dealer1hand = dealer1hand - 20 //
+        }
+        else{
+          self.printwin.isHidden = false //print lose
+          //sorry you are busted
+        }
       }
     }
     else{
       dealer1hand = dealer1hand + rightnum
       if dealer1hand > 21{
-        self.printwin.isHidden = false //print lose
-        //you win, dealer busted
+        if(numofAforD == 1){
+          dealer1hand = dealer1hand - 10 //treat one ace as one
+        }
+        else if(numofAforD == 2){
+          dealer1hand = dealer1hand - 20
+        }
+        else{
+          self.printwin.isHidden = false //print lose
+          //sorry you are busted
+        }
       }
     }
     
-    if(count == 1){
+    if(x == 1){
       Dealer3.image = UIImage(named: "card\(rightnum)")//create an object
     }
-    else if(count == 2){
+    else if(x == 2){
       Dealer4.image = UIImage(named: "card\(rightnum)")//create an object
     }
-    else if(count == 3){
+    else if(x == 3){
       Dealer5.image = UIImage(named: "card\(rightnum)")//create an object
     }
-    else if(count == 4){
+    else if(x == 4){
       Dealer6.image = UIImage(named: "card\(rightnum)")//create an object
     }
-    else if(count == 4){
+    else if(x == 5){
       Dealer7.image = UIImage(named: "card\(rightnum)")//create an object
     }
     else{
       Dealer8.image = UIImage(named: "card\(rightnum)")//create an object
-    }
+      }
+    
   }
  
   
@@ -387,33 +412,33 @@ var dleftnum = 0
     self.dis100.isHidden = true
     
    
-    while dealer1hand < 17{
+    while (dealer1hand < 17){
       countD = countD + 1
-      
+    //  print(countD)
       //run continuedealer
-      if(count == 1){
+      if(countD == 1){
         //player3 is unhidden
         self.Dealer3.isHidden = false
         Dealercontinuevalue(x: countD)
       }
-      else if(count == 2){
+      else if(countD == 2){
         //player4 is unhidden
         self.Dealer4.isHidden = false
         Dealercontinuevalue(x: countD)
       }
-      else if(count == 3){
+      else if(countD == 3){
         //player5 is unhidden
        self.Dealer5.isHidden = false
       Dealercontinuevalue(x: countD)
         
       }
-      else if(count == 4){
+      else if(countD == 4){
         //player6 is unhidden
         self.Dealer6.isHidden = false
         Dealercontinuevalue(x: countD)
         
       }
-      else if(count == 5){
+      else if(countD == 5){
         //player7 is unhidden
        self.Dealer7.isHidden = false
         Dealercontinuevalue(x: countD)
@@ -472,7 +497,6 @@ var dleftnum = 0
       compare()//safe to call
     }
     }
-    
   }
   
   func compare() -> Void{
@@ -490,6 +514,7 @@ var dleftnum = 0
     }
     else {
       //it's a tie
+        self.printtie.isHidden = false//print it's a tie
       playerTotal = playerTotal + amountbetput//get you put in back
 
     }
@@ -543,4 +568,5 @@ var dleftnum = 0
   }
   
 }
+
 
