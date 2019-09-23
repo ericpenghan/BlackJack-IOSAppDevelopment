@@ -194,8 +194,8 @@ var dleftnum = 0
   //dealer gets the first two cards, called first when click start button
   func dealercountingvalue() -> Void{//couting and adding 2 cards value
     
- //  let leftnum = Int.random(in: 2...14)//need to go back
-    let leftnum = 14
+    let leftnum = Int.random(in: 2...14)//need to go back
+
     if leftnum == 11 || leftnum == 12 || leftnum == 13{//if cards r j,q,k assign them to 10
       dealer1hand = 10
     }
@@ -209,8 +209,6 @@ var dleftnum = 0
     
     
    let rightnum = Int.random(in: 2...14)
-
-  
     
     if rightnum == 11 || rightnum == 12 || rightnum == 13{//if cards r j,q,k assign them to 10
       dealer1hand = dealer1hand + 10
