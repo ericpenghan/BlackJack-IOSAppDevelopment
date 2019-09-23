@@ -21,7 +21,6 @@ class ViewController: UIViewController {
    var dealer1hand = 0//starting hand value set to 0
 var dleftnum = 0
   var startcount = 0//set to 0
-  
   var playerTotal = 500
   var amountbetput = 0
 //  var lef = 0
@@ -31,7 +30,7 @@ var dleftnum = 0
 //  var total = 500
   
  
-  
+  //all connecting
   @IBOutlet weak var leftimageviewer: UIImageView!
   @IBOutlet weak var rightimageview: UIImageView!
   @IBOutlet weak var hitting: UIButton!
@@ -61,16 +60,8 @@ var dleftnum = 0
   @IBOutlet weak var dis100: UIButton!
   @IBOutlet weak var dealerscore: UILabel!
   @IBOutlet weak var playerscore: UILabel!
-  
-
-
-  
- 
-  
-
-  
-  
- 
+  @IBOutlet weak var ChooseBetMessage: UILabel!
+  @IBOutlet weak var finishbetting: UIButton!
   
 
 
@@ -81,7 +72,7 @@ var dleftnum = 0
   // Do any additional setup after loading the view.
     let Tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self , action: #selector(DismissKeyboard))//hide the keyboard when tapping
     view.addGestureRecognizer(Tap)//hide the keyboard when tapping
- 
+    
   }
   
   @objc func DismissKeyboard(){//hide the keyboard when tapping
@@ -90,6 +81,8 @@ var dleftnum = 0
   
 
   @IBAction func bet25(_ sender: Any) {//when click 25
+  
+ 
     playerTotal = playerTotal - 25
     playerscore.text = String(playerTotal)
     amountbetput = amountbetput + 25
@@ -107,6 +100,8 @@ var dleftnum = 0
   
   
   @IBAction func bet50(_ sender: Any) {//when click 50
+    
+    
     playerTotal = playerTotal - 50
     playerscore.text = String(playerTotal)
     amountbetput = amountbetput + 50
@@ -121,6 +116,7 @@ var dleftnum = 0
   }
 
   @IBAction func bet100(_ sender: Any) {//when click 100
+  
     playerTotal = playerTotal - 100
     playerscore.text = String(playerTotal)
     amountbetput = amountbetput + 100
@@ -141,48 +137,48 @@ var dleftnum = 0
     
    
     playerscore.text = String(playerTotal)//display new num after double
-
     
-    
+   // count = count + 1
+    dealTapped(sender)
+    //count = 0
+    Stand(sender)
+    //make sure win is stay hiddem
+    if(self.printlose.isHidden == false){
+      self.printwin.isHidden = true
+      self.lostcardv.isHidden = true
+    }
+    //  print(dealer1hand)//testing
   }
 
   
   
   @IBAction func startbutton(_ sender: Any){
+    //first reset everything
      numofAforD =  0//reset
     countD = 0//reset coutd to 0
     user1hand = 0//reset userhand
     amountbetput = 0//reset the amount bet put every time hit start
     numofA = 0
+    
+    
+    
    dealercountingvalue()//dealer get 2 cards
   countingvalue()//user get two card and calculate the value at hand
-        self.Dealer3.isHidden = true
-         self.Dealer4.isHidden = true
-        self.Dealer5.isHidden = true
-        self.Dealer6.isHidden = true
-        self.Dealer7.isHidden = true
-        self.Dealer8.isHidden = true
-    self.Player3.isHidden = true
-    self.Player4.isHidden = true
-     self.Player5.isHidden = true
-     self.Player6.isHidden = true
-     self.Player7.isHidden = true
-     self.Player8.isHidden = true
-     self.printwin.isHidden = true
-     self.printlose.isHidden = true
-    self.printtie.isHidden = true
-    self.lostcardv.isHidden = true
-    self.dealerscore.isHidden = true
-    self.dis25.isHidden = false//unhidden
-    self.dis50.isHidden = false//unhidden
-    self.dis100.isHidden = false//unhidden
+  startHide()//hide everthing
+  
+    //display intial everytime it resets
+    self.ChooseBetMessage.isHidden = false
+    self.finishbetting.isHidden = false
     
+  
+    
+    
+    //reset if money go under 500
     if(playerTotal <= 0){
-        playerTotal = 500//reset
-    }else{
-
-      //do nothing
+        playerTotal = 500
+      playerscore.text = String(playerTotal)
     }
+
 
   
 
@@ -195,10 +191,11 @@ var dleftnum = 0
     
   }
   
+  //dealer gets the first two cards, called first when click start button
   func dealercountingvalue() -> Void{//couting and adding 2 cards value
     
-    let leftnum = Int.random(in: 2...14)//need to go back
- 
+ //  let leftnum = Int.random(in: 2...14)//need to go back
+    let leftnum = 14
     if leftnum == 11 || leftnum == 12 || leftnum == 13{//if cards r j,q,k assign them to 10
       dealer1hand = 10
     }
@@ -211,14 +208,15 @@ var dleftnum = 0
     }
     
     
-    let rightnum = Int.random(in: 2...14)
-   
+   let rightnum = Int.random(in: 2...14)
+
+  
     
     if rightnum == 11 || rightnum == 12 || rightnum == 13{//if cards r j,q,k assign them to 10
       dealer1hand = dealer1hand + 10
     }
     else if rightnum == 14{
-        dealer1hand = dealer1hand + 11 //if get another A, then treeat it as 1
+        dealer1hand = dealer1hand + 1 //if get another A, then treeat it as 1
          numofAforD =  numofAforD + 1//increment one ace
       }
     else{
@@ -233,6 +231,7 @@ var dleftnum = 0
   
   }
   
+  //players get 2 cards, get called first
   func countingvalue() -> Void{//couting and adding 2 cards value
 
     let leftnum = Int.random(in: 2...14)
@@ -252,7 +251,7 @@ var dleftnum = 0
 
     let rightnum = Int.random(in: 2...14)
    
-    //    print(rightnum)
+   
     if rightnum == 11 || rightnum == 12 || rightnum == 13{//if cards r j,q,k assign them to 10
       user1hand = user1hand + 10
     }
@@ -272,8 +271,57 @@ var dleftnum = 0
 
   }
   
-  
+  //hide things when user click hide, hdie function does different things
+  func startHide() -> Void{
+    //hide intial cards first, and player options
+      self.Dealer1.isHidden = true
+      self.Dealer2.isHidden = true
+      self.leftimageviewer.isHidden = true
+      self.rightimageview.isHidden = true
+    self.dealerBack.isHidden = true
 
+    hitting.isHidden = true
+    Standing.isHidden = true
+    doubleDown.isHidden = true
+    
+    self.Dealer3.isHidden = true
+    self.Dealer4.isHidden = true
+    self.Dealer5.isHidden = true
+    self.Dealer6.isHidden = true
+    self.Dealer7.isHidden = true
+    self.Dealer8.isHidden = true
+    self.Player3.isHidden = true
+    self.Player4.isHidden = true
+    self.Player5.isHidden = true
+    self.Player6.isHidden = true
+    self.Player7.isHidden = true
+    self.Player8.isHidden = true
+    self.printwin.isHidden = true
+    self.printlose.isHidden = true
+    self.printtie.isHidden = true
+    self.lostcardv.isHidden = true
+    self.dealerscore.isHidden = true
+    self.dis25.isHidden = false//unhidden
+    self.dis50.isHidden = false//unhidden
+    self.dis100.isHidden = false//unhidden
+    
+ 
+  }
+  
+  //when bet placed
+  func betplacedHide() -> Void{
+      //hide bet message, then reveil the cards
+      self.ChooseBetMessage.isHidden = true
+         self.dealerBack.isHidden = false
+      self.Dealer1.isHidden = false
+      self.Dealer2.isHidden = false
+      self.leftimageviewer.isHidden = false
+      self.rightimageview.isHidden = false
+      hitting.isHidden = false
+      Standing.isHidden = false
+      doubleDown.isHidden = false
+    
+  }
   
   
   
@@ -281,15 +329,22 @@ var dleftnum = 0
     
     let rightnum = Int.random(in: 2...14)
     //   generate random num
-  
+
     if rightnum == 11 || rightnum == 12 || rightnum == 13{//if cards r j,q,k assign them to 10
       dealer1hand = dealer1hand + 10
       if dealer1hand > 21{
         if(numofAforD == 1){
           dealer1hand = dealer1hand - 10 //treat one ace as one
+          numofAforD = 0//reset
+      
         }
         else if(numofAforD == 2){
           dealer1hand = dealer1hand - 20//treat ace as one
+           numofAforD = 0//reset
+        }
+        else if(numofAforD == 3){
+          dealer1hand = dealer1hand - 30//treat ace as one
+           numofAforD = 0//reset
         }
         else{
         self.printwin.isHidden = false //print lose
@@ -304,9 +359,15 @@ var dleftnum = 0
         
         if(numofAforD == 1){
           dealer1hand = dealer1hand - 10 //treat one ace as one
+           numofAforD = 0//reset
         }
         else if(numofAforD == 2){
           dealer1hand = dealer1hand - 20 //
+           numofAforD = 0//reset
+        }
+        else if(numofAforD == 3){
+          dealer1hand = dealer1hand - 30//treat ace as one
+           numofAforD = 0//reset
         }
         else{
           self.printwin.isHidden = false //print lose
@@ -319,9 +380,15 @@ var dleftnum = 0
       if dealer1hand > 21{
         if(numofAforD == 1){
           dealer1hand = dealer1hand - 10 //treat one ace as one
+           numofAforD = 0//reset
         }
         else if(numofAforD == 2){
           dealer1hand = dealer1hand - 20
+           numofAforD = 0//reset
+        }
+        else if(numofAforD == 3){
+          dealer1hand = dealer1hand - 30//treat ace as one
+           numofAforD = 0//reset
         }
         else{
           self.printwin.isHidden = false //print lose
@@ -411,7 +478,8 @@ var dleftnum = 0
     self.dis50.isHidden = true
     self.dis100.isHidden = true
     
-   
+  
+
     while (dealer1hand < 17){
       countD = countD + 1
     //  print(countD)
@@ -500,6 +568,7 @@ var dleftnum = 0
   }
   
   func compare() -> Void{
+  
     if(dealer1hand > user1hand && dealer1hand != user1hand && dealer1hand <= 21){
       self.lostcardv.isHidden = false //print lose
      //money doesn't change
@@ -520,10 +589,19 @@ var dleftnum = 0
     }
   }
   
-
-  @IBAction func dealTapped(_ sender: Any) {
+  @IBAction func finishbetClicked(_ sender: Any) {
+    //call hide intial fucntion
+    betplacedHide()
+    self.dis25.isHidden = true
+    self.dis50.isHidden = true
+    self.dis100.isHidden = true
+    finishbetting.isHidden = true//hide the button at the end
+  }
+  
+  
+@IBAction func dealTapped(_ sender: Any) {
     //hitting finished
-    
+  
 //    print(numofA)
         self.dis25.isHidden = true
         self.dis50.isHidden = true
