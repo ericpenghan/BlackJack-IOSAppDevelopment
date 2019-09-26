@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  warcard
+//  Blackjack
 //
 //  Created by Eric Han on 9/4/19.
 //  Copyright © 2019 Eric Han. All rights reserved.
